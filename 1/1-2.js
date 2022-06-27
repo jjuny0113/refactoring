@@ -1,10 +1,10 @@
 import { invoice, plays } from "./example.js";
 
-const playFor = (aPerformance) => plays[aPerformance.playId];
-const amountFor = (aPerformance) => {
+const playFor = (plays, aPerformance) => plays[aPerformance.playId];
+const amountFor = (plays, aPerformance) => {
   let result = 0;
 
-  switch (playFor(aPerformance).type) {
+  switch (playFor(plays, aPerformance).type) {
     case "tragedy":
       result = 40000;
       if (aPerformance.audience > 30) {
@@ -20,16 +20,16 @@ const amountFor = (aPerformance) => {
       result += 300 * aPerformance.audience;
       break;
     default:
-      throw new Error(`알 수 없는 장르: ${playFor(aPerformance).type}`);
+      throw new Error(`알 수 없는 장르: ${playFor(plays, aPerformance).type}`);
   }
 
   return result;
 };
 
-const volumeCreditsFor = (aPerformance) => {
+const volumeCreditsFor = (plays, aPerformance) => {
   let result = 0;
   result += Math.max(aPerformance.audience - 30, 0);
-  if ("comedy" === playFor(aPerformance).type)
+  if ("comedy" === playFor(plays, aPerformance).type)
     result += Math.floor(aPerformance.audience / 5);
   return result;
 };
@@ -41,35 +41,42 @@ const USD = (aNumber) =>
     maximumFractionDigits: 2,
   }).format(aNumber / 100);
 
-const totalVolumeCredits = () => {
+const totalVolumeCredits = (plays, data) => {
   let result = 0;
-  for (let perf of invoice.performances) {
-    result += volumeCreditsFor(perf);
+  for (let perf of data.performances) {
+    result += volumeCreditsFor(plays, perf);
   }
   return result;
 };
 
-const totalAmount = () => {
+const totalAmount = (plays, data) => {
   let result = 0;
-  for (let perf of invoice.performances) {
-    result += amountFor(perf);
+  for (let perf of data.performances) {
+    result += amountFor(plays, perf);
   }
   return result;
 };
 
-const statement = (invoice, plays) => {
-  let result = `청구 내역 (고객명: ${invoice.customer})\n`;
+const renderPlainText = (data, plays) => {
+  let result = `청구 내역 (고객명: ${data.customer})\n`;
 
-  for (let perf of invoice.performances) {
-    result += `${playFor(perf).name}: ${USD(amountFor(perf))} (${
+  for (let perf of data.performances) {
+    result += `${playFor(plays, perf).name}: ${USD(amountFor(plays, perf))} (${
       perf.audience
     }석)\n`;
   }
 
-  result += `총액: ${USD(totalAmount())}\n`;
-  result += `적립 포인트: ${totalVolumeCredits()}\n`;
+  result += `총액: ${USD(totalAmount(plays, data))}\n`;
+  result += `적립 포인트: ${totalVolumeCredits(plays, data)}\n`;
 
   return result;
+};
+
+const statement = (invoice, plays) => {
+  const statementData = {};
+  statementData.customer = invoice.customer;
+  statementData.performances = invoice.performances;
+  return renderPlainText(statementData, plays);
 };
 
 console.log(statement(invoice, plays));
