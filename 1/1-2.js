@@ -23,6 +23,9 @@ const amountFor = (aPerformance, play) => {
     return result
 }
 
+const playFor = (aPerformance) => paly[aPerformance.playId]
+
+
 const statement = (invoice, plays) => {
     let totalAmount = 0;
     let volumeCredits = 0;
@@ -34,7 +37,7 @@ const statement = (invoice, plays) => {
     }).format;
 
     for (let perf of invoice.performances) {
-        const play = plays[perf.playId];
+        const play = playFor(perf);
 
 
         let thisAmount = amountFor(perf, play)
