@@ -39,22 +39,29 @@ const USD = (aNumber) =>
     style: "currency",
     currency: "USD",
     maximumFractionDigits: 2,
-  }).format(aNumber/100);
+  }).format(aNumber / 100);
+
+const totalVolumeCredits = () => {
+  let result = 0;
+  for (let perf of invoice.performances) {
+    result += volumeCreditsFor(perf);
+  }
+  return result;
+};
 
 const statement = (invoice, plays) => {
   let totalAmount = 0;
-  let volumeCredits = 0;
   let result = `청구 내역 (고객명: ${invoice.customer})\n`;
 
   for (let perf of invoice.performances) {
-    volumeCredits += volumeCreditsFor(perf);
-
     //청구 내역 출력한다.
     result += `${playFor(perf).name}: ${USD(amountFor(perf))} (${
       perf.audience
     }석)\n`;
     totalAmount += amountFor(perf);
   }
+
+  let volumeCredits = totalVolumeCredits();
   result += `총액: ${USD(totalAmount)}\n`;
   result += `적립 포인트: ${volumeCredits}\n`;
 
