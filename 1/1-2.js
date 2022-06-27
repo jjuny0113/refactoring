@@ -40,7 +40,7 @@ const statement = (invoice, plays) => {
   }).format;
 
   for (let perf of invoice.performances) {
-    let thisAmount = amountFor(perf);
+    
 
     //포인트 적립
     volumeCredits += Math.max(perf.audience - 30, 0);
@@ -50,10 +50,10 @@ const statement = (invoice, plays) => {
       volumeCredits += Math.floor(perf.audience / 5);
 
     //청구 내역 출력한다.
-    result += `${playFor(perf).name}: ${format(thisAmount / 100)} (${
+    result += `${playFor(perf).name}: ${format(amountFor(perf) / 100)} (${
       perf.audience
     }석)\n`;
-    totalAmount += thisAmount;
+    totalAmount += amountFor(perf);
   }
   result += `총액: ${format(totalAmount / 100)}\n`;
   result += `적립 포인트: ${volumeCredits}\n`;
