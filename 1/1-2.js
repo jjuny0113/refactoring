@@ -1,6 +1,5 @@
 import { invoice, plays } from "./example.js";
 
-
 const playFor = (aPerformance) => plays[aPerformance.playId];
 const amountFor = (aPerformance) => {
   let result = 0;
@@ -27,7 +26,13 @@ const amountFor = (aPerformance) => {
   return result;
 };
 
-
+const volumeCreditsFor = (perf) => {
+  let volumeCredits = 0;
+  volumeCredits += Math.max(perf.audience - 30, 0);
+  if ("comedy" === playFor(perf).type)
+    volumeCredits += Math.floor(perf.audience / 5);
+  return volumeCredits;
+};
 
 const statement = (invoice, plays) => {
   let totalAmount = 0;
@@ -40,14 +45,7 @@ const statement = (invoice, plays) => {
   }).format;
 
   for (let perf of invoice.performances) {
-    
-
-    //포인트 적립
-    volumeCredits += Math.max(perf.audience - 30, 0);
-
-    //희극 관객 5명마다 추가 포인트를 제공한다.
-    if ("comedy" === playFor(perf).type)
-      volumeCredits += Math.floor(perf.audience / 5);
+    volumeCredits += volumeCreditsFor(perf);
 
     //청구 내역 출력한다.
     result += `${playFor(perf).name}: ${format(amountFor(perf) / 100)} (${
