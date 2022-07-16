@@ -1,7 +1,7 @@
 export function priceOrder(product, quantity, shippingMethod) {
   const basePrice = getBasePrice(product.basePrice, quantity);
   const discount = getDiscount(product, quantity)
-  const shippingCost = getShippingCost(quantity, shippingMethod)
+  const shippingCost = getShippingCost(basePrice, quantity, shippingMethod)
 
   const price = basePrice - discount + shippingCost;
   return price;
@@ -12,7 +12,7 @@ const getDiscount = (product, quantity) => Math.max(quantity - product.discountT
   product.basePrice *
   product.discountRate;
 
-const getShippingCost = (quantity, shippingMethod) => {
+const getShippingCost = (basePrice, quantity, shippingMethod) => {
   const shippingPerCase = basePrice > shippingMethod.discountThreshold
     ? shippingMethod.discountedFee
     : shippingMethod.feePerCase;
