@@ -1,18 +1,24 @@
 export function priceOrder(product, quantity, shippingMethod) {
-  const basePrice = product.basePrice * quantity;
-  const discount =
-    Math.max(quantity - product.discountThreshold, 0) *
-    product.basePrice *
-    product.discountRate;
-  const shippingPerCase =
-    basePrice > shippingMethod.discountThreshold
-      ? shippingMethod.discountedFee
-      : shippingMethod.feePerCase;
-  const shippingCost = quantity * shippingPerCase;
+  const basePrice = getBasePrice(product.basePrice, quantity);
+  const discount = getDiscount(product, quantity)
+  const shippingCost = getShippingCost(quantity, shippingMethod)
+
   const price = basePrice - discount + shippingCost;
   return price;
 }
 
+const getBasePrice = (basePrice, quantity) => basePrice * quantity
+const getDiscount = (product, quantity) => Math.max(quantity - product.discountThreshold, 0) *
+  product.basePrice *
+  product.discountRate;
+
+const getShippingCost = (quantity, shippingMethod) => {
+  const shippingPerCase = basePrice > shippingMethod.discountThreshold
+    ? shippingMethod.discountedFee
+    : shippingMethod.feePerCase;
+  const result = quantity * shippingPerCase;
+  return result
+}
 // 사용 예:
 const product = {
   basePrice: 10,

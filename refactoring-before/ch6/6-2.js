@@ -1,6 +1,6 @@
 // 예제 1
 export function rating(driver) {
-  return moreThanFiveLateDeliveries(driver) ? 2 : 1;
+  return driver.numberOfLateDeliveries > 5 ? 2 : 1;
 }
 
 function moreThanFiveLateDeliveries(dvr) {
@@ -9,12 +9,15 @@ function moreThanFiveLateDeliveries(dvr) {
 
 // 예제 2
 function reportLines(customer) {
-  const lines = [];
-  gatherCustomerData(lines, customer);
-  return lines;
+  return Object.keys(customer).map((el) => [el, customer[el]])
 }
 
 function gatherCustomerData(out, customer) {
   out.push(['name', customer.name]);
   out.push(['location', customer.location]);
 }
+const customer = {
+  name: 'abc',
+  location: '전주'
+}
+console.log(reportLines(customer))
