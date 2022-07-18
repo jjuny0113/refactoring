@@ -1,7 +1,12 @@
+const customerRepository = new CustomerRepository();
+const order = new Order(
+  data.number,
+  customerRepository.registerCustomer(data.customerId)
+);
 class Order {
-  constructor(data) {
-    this._number = data.number;
-    this._customer = new Customer(data.customerId);
+  constructor(number, customer) {
+    this._number = number;
+    this._customer = customer;
   }
 
   get customer() {
@@ -10,11 +15,32 @@ class Order {
 }
 
 class Customer {
-  constructor(id) {
+  constructor(id, name) {
     this._id = id;
+    this._name = name;
   }
 
   get id() {
     return this._id;
+  }
+}
+
+//customer에 대한 정보를 가지고 있음
+class CustomerRepository {
+  #customers;
+
+  constructor() {
+    this.#customers = new Map();
+  }
+
+  registerCustomer(id) {
+    if (!this.#customers.has(id)) {
+      this.#customers.set(id, new Customer(id));
+    }
+    return findCustomer(id);
+  }
+
+  findCustomer(id) {
+    return this.#customers.get(id);
   }
 }
