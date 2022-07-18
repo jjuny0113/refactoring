@@ -47,7 +47,7 @@ export class Shipment {
 }
 
 const shipment = new Shipment(new TrackingInformation(999, 'Maersk'));
-console.log(shipment.trackingInfo);
+console.log(shipment.trackingInformation);
 
 shipment.trackingInformation.shippingCompany = 'COSCO';
 console.log(shipment.trackingInfo);

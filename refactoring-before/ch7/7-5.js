@@ -1,11 +1,11 @@
+import { TelephoneNumber } from "./7-5-re";
+
 class Person {
   #name;
-  #officeAreaCode;
-  #officeNumber;
+  #telephoneNumber;
   constructor(name, areaCode, number) {
     this.#name = name;
-    this.#officeAreaCode = areaCode;
-    this.#officeNumber = number;
+    this.#telephoneNumber = new TelephoneNumber(areaCode, number);
   }
 
   get name() {
@@ -17,11 +17,11 @@ class Person {
   }
 
   get telephoneNumber() {
-    return `(${this.officeAreaCode}) ${this.officeNumber}`;
+    return this.#telephoneNumber.toString;
   }
 
   get officeAreaCode() {
-    return this.#officeAreaCode;
+    return this.#telephoneNumber.areaCode;
   }
 
   set officeAreaCode(arg) {
@@ -37,7 +37,7 @@ class Person {
   }
 }
 
-const person = new Person('엘리', '010', '12345678');
+const person = new Person("엘리", "010", "12345678");
 console.log(person.name);
 console.log(person.officeAreaCode);
 console.log(person.officeNumber);
