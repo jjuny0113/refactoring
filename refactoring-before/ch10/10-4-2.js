@@ -1,9 +1,9 @@
 export function rating(voyage, history) {
   // 투자 등급
-  const vpf = voyageProfitFactor(voyage, history);
-  const vr = voyageRisk(voyage);
-  const chr = captainHistoryRisk(voyage, history);
-  if (vpf * 3 > vr + chr * 2) return 'A';
+  const profit = voyageProfitFactor(voyage, history);
+  const risk = voyageRisk(voyage);
+  const historyRist = captainHistoryRisk(voyage, history);
+  if (profit * 3 > risk + historyRist * 2) return 'A';
   else return 'B';
 }
 

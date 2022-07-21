@@ -25,19 +25,20 @@ class Person {
   }
 
   set officeAreaCode(arg) {
-    this.#officeAreaCode = arg;
+    this.officeAreaCode = arg;
   }
 
   get officeNumber() {
-    return this.#officeNumber;
+    return this.officeNumber;
   }
 
   set officeNumber(arg) {
-    this.#officeNumber = arg;
+    this.officeNumber = arg;
   }
 }
 
 const person = new Person("엘리", "010", "12345678");
+
 console.log(person.name);
 console.log(person.officeAreaCode);
 console.log(person.officeNumber);
